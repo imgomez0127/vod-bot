@@ -54,7 +54,7 @@ Examples:
             if(video_url == None):
                 await message.channel.send("Could not find a video for the given search terms")
                 return None
-            await message.channel.send("https:"+video_url)
+            await message.channel.send("https://youtube.com/watch?v="+video_url)
             return None
 if __name__ == "__main__":
     test_bot = VodBot()

@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+import re
 def buildURL(character="",player="",tournament=""):
     default_url = "https://vods.co/ultimate"
     path = "/ultimate/"
@@ -20,10 +21,20 @@ def getVideoUrl(url):
     view_response = requests.get(view_link)
     view_html = BeautifulSoup(view_response.text,"lxml")
     return  view_html.find("iframe")["src"]
+def getVideoID(url):
+    embedRegex = re.compile("embed/")    
+    search_results = embedRegex.search(url)
+    if(search_results == None):
+        return None
+    videoID = ""
+    for char in url[search_results.span()[1]:]:
+        if char == "?":
+            return videoID
+        videoID += char
+    return videoID
 def getVod(character="",player="",tournament=""):
     if(character == "" and player == "" and tournament == ""):
         return None
     full_url = buildURL(character,player,tournament)
     link = getVideoUrl(full_url)
-    return link 
-print(getVod(character="Pichu"))
+    return getVideoID(link) 
